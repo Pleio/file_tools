@@ -101,6 +101,14 @@
 				$owner = elgg_get_page_owner_entity();
 				if ($owner && $owner->canWriteToContainer()) {
 					$guid = $owner->getGUID();
+
+					elgg_register_menu_item('title', array(
+						'name' => 'file_tools:upload:file',
+						'text' => elgg_echo("file:upload"),
+						'id' => 'file_tools_list_upload_file_toggle',
+						'link_class' => 'elgg-button elgg-button-action'
+					));
+
 					elgg_register_menu_item('title', array(
 						'name' => 'file_tools:new:title',
 						'text' => elgg_echo("file_tools:new:title"),
@@ -109,9 +117,6 @@
 					));
 				}
 			}
-
-			// register title button to add a new file
-			elgg_register_title_button();
 
 			// get data for tree
 			$folders = file_tools_get_folders($page_owner->getGUID());

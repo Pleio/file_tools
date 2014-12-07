@@ -61,16 +61,28 @@
 		$body .= "</div>";
 		
 		$tabs = elgg_view("file_tools/upload_tabs", array("upload_type" => $upload_type));
-		
-		// build page
-		$page_data = elgg_view_layout("content", array(
-			"title" => $title_text,
-			"content" => $body,
-			"filter" => $tabs
-		));
-		
+				
 		// draw page
-		echo elgg_view_page($title_text, $page_data);
+		if(elgg_is_xhr()){
+			$page_data = elgg_view("page/layouts/content/filter", array(
+				"title" => $title_text,
+				"filter_override" => $tabs
+			));
+			$page_data .= $body;
+						
+			echo "<div style='width: 550px; height:500px;'>";
+			echo elgg_view_title($title_text);
+			echo $page_data;
+			echo "</div>";
+		} else {	
+			$page_data = elgg_view_layout("content", array(
+				"title" => $title_text,
+				"content" => $body,
+				"filter" => $tabs
+			));
+
+			echo elgg_view_page($title_text, $page_data);
+		}
 	} else {
 		forward();
 	}

@@ -301,6 +301,18 @@ elgg.file_tools.bulk_download = function(e) {
 	}
 }
 
+elgg.file_tools.upload_file = function(event) {
+	event.preventDefault();
+
+	var hash = window.location.hash.substr(1);
+	var link = elgg.get_site_url() + "file_tools/file/new/" + elgg.get_page_owner_guid() + "?folder_guid=" + hash;
+	
+	$.fancybox({
+		href: link,
+		titleShow: false
+	});
+}
+
 elgg.file_tools.new_folder = function(event) {
 	event.preventDefault();
 
@@ -411,6 +423,7 @@ elgg.file_tools.init = function() {
 	$('#file-tools-show-more-files').live("click", elgg.file_tools.show_more_files);
 
 	$('#file_tools_list_new_folder_toggle').live('click', elgg.file_tools.new_folder);
+	$('#file_tools_list_upload_file_toggle').live('click', elgg.file_tools.upload_file);
 }
 
 // register init hook
