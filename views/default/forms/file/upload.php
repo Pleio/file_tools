@@ -29,6 +29,7 @@ if ($guid) {
 	<label><?php echo $file_label; ?></label><br />
 	<?php echo elgg_view('input/file', array('name' => 'upload')); ?>
 </div>
+<!--
 <div>
 	<label><?php echo elgg_echo('title'); ?></label><br />
 	<?php echo elgg_view('input/text', array('name' => 'title', 'value' => $title)); ?>
@@ -36,7 +37,7 @@ if ($guid) {
 <div>
 	<label><?php echo elgg_echo('description'); ?></label>
 	<?php echo elgg_view('input/longtext', array('name' => 'description', 'value' => $desc)); ?>
-</div>
+</div>-->
 <div>
 	<label><?php echo elgg_echo('tags'); ?></label>
 	<?php echo elgg_view('input/tags', array('name' => 'tags', 'value' => $tags)); ?>
