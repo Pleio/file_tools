@@ -3,10 +3,12 @@
 	gatekeeper();
 	
 	$folder_guid = (int) get_input("guid");
-	
+
 	if(!empty($folder_guid)) {
 		if($folder = get_entity($folder_guid)) {
 			if(elgg_instanceof($folder, "object", FILE_TOOLS_SUBTYPE) && $folder->canEdit()) {
+				$forward_url = file_tools_get_parent_url($folder);
+
 				if($folder->delete()) {
 					system_message(elgg_echo("file_tools:actions:delete:success"));
 				} else {
@@ -21,5 +23,9 @@
 	} else {
 		register_error(elgg_echo("InvalidParameterException:MissingParameter"));
 	}
+
+	if (!$forward_url) {
+		$forward_url = REFERER;
+	}
 	
-	forward(REFERER);
+	forward($forward_url);

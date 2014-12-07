@@ -965,3 +965,18 @@
 		return $result;
 	}
 	
+	// retrieve URL of the parent folder
+	function file_tools_get_parent_url(ElggObject $folder) {
+		if ($folder->parent_guid !== 0) {
+			$parent = get_entity($folder->parent_guid);
+			return file_tools_folder_url_handler($parent);
+		} else {
+			$container = $folder->getContainerEntity();
+
+			if (elgg_instanceof($container, "group")) {
+				return "file/group/" . $container->getGUID() . "/all";
+			} else {
+				return "file/owner/" . $container->username;
+			}
+		}	
+	}

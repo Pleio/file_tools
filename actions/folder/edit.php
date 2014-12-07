@@ -68,8 +68,7 @@
 					$folder->parent_guid = $parent_guid;
 		
 					if($folder->save()) {
-						$forward_url = $folder->getURL();
-						
+						$forward_url = file_tools_get_parent_url($folder);
 						system_message(elgg_echo("file_tools:action:edit:success"));
 					} else {
 						register_error(elgg_echo("file_tools:action:edit:error:save"));
