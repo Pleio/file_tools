@@ -221,7 +221,8 @@
 			"limit" => false,
 			"metadata_name" => "parent_guid",
 			"metadata_value" => $parent_guid,
-			"order_by_metadata" => array('name' => 'order', 'direction' => 'ASC', 'as' => 'integer'),
+			"joins" => array("JOIN elgg_objects_entity oe ON oe.guid = e.guid"),
+			"order_by" => "oe.title asc",
 			"full_view" => false,
 			"pagination" => false
 		);
