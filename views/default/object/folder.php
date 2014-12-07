@@ -49,11 +49,12 @@
 		$summary = elgg_view("object/elements/summary", $params);
 		
 		echo elgg_view("object/elements/full", array(
-			"entity" => $folder,
+			/*"entity" => $folder,
 			"title" => false,
 			"icon" => $icon,
 			"summary" => $summary,
 			"body" => elgg_view("output/longtext", array("value" => $folder->description))
+			*/
 		));
 	} else {
 		// summary view
