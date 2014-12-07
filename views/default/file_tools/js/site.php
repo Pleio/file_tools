@@ -190,6 +190,8 @@ elgg.file_tools.tree.init = function() {
 			}
 		});
 	}
+
+	$('#file-tools-folder-tree').hide();
 }
 
 elgg.file_tools.breadcrumb_click = function(event) {

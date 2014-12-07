@@ -96,9 +96,23 @@
 			elgg_push_breadcrumb(elgg_echo("file"), "file/all");
 			elgg_push_breadcrumb($page_owner->name);
 			
+			// register title button to add new folder
+			if (elgg_is_logged_in()) {
+				$owner = elgg_get_page_owner_entity();
+				if ($owner && $owner->canWriteToContainer()) {
+					$guid = $owner->getGUID();
+					elgg_register_menu_item('title', array(
+						'name' => 'file_tools:new:title',
+						'text' => elgg_echo("file_tools:new:title"),
+						'id' => 'file_tools_list_new_folder_toggle',
+						'link_class' => 'elgg-button elgg-button-action'
+					));
+				}
+			}
+
 			// register title button to add a new file
 			elgg_register_title_button();
-			
+
 			// get data for tree
 			$folders = file_tools_get_folders($page_owner->getGUID());
 
@@ -110,7 +124,6 @@
 			// make sidebar
 			$sidebar = elgg_view("file_tools/list/tree", array("folder" => $folder, "folders" => $folders));
 			$sidebar .= elgg_view("file_tools/sidebar/sort_options");
-			$sidebar .= elgg_view("file_tools/sidebar/info");
 			$sidebar .= elgg_view("page/elements/tagcloud_block", array("subtypes" => "file", "owner_guid" => $page_owner->getGUID()));
 			
 			// build page params

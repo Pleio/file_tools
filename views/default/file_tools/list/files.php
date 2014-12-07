@@ -15,7 +15,7 @@
 			$sub_folders = array();
 		}
 		
-		$entities = array_merge($sub_folders, $files) ;
+		$entities = array_merge($sub_folders, $files);
 	} else {
 		$entities = $files;
 	}

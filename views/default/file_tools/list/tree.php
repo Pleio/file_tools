@@ -149,10 +149,6 @@
 	if($page_owner->canEdit() || ($page_owner instanceof ElggGroup && $page_owner->isMember() && $page_owner->file_tools_structure_management_enable != "no")) { 
 		elgg_load_js("lightbox");
 		elgg_load_css("lightbox");
-		
-		$body .= "<div class='mtm'>";
-		$body .= elgg_view("input/button", array("value" => elgg_echo("file_tools:new:title"), "id" => "file_tools_list_new_folder_toggle", "class" => "elgg-button-action"));
-		$body .= "</div>";
 	}
 	
 	// output file tree
