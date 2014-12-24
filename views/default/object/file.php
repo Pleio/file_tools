@@ -64,7 +64,7 @@
 	if(!elgg_in_context("widgets")){
 		$entity_menu = elgg_view_menu("entity", array(
 			"entity" => $file,
-			"handler" => "file",
+			"handler" => "file_tools/file",
 			"sort_by" => "priority",
 			"class" => "elgg-menu-hz"
 		));

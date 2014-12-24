@@ -77,8 +77,11 @@
 		elgg_register_action("file_tools/folder/reorder", dirname(__FILE__) . "/actions/folder/reorder.php");
 		elgg_register_action("file_tools/upload/zip", dirname(__FILE__) . "/actions/upload/zip.php");
 		elgg_register_action("file_tools/folder/delete", dirname(__FILE__) . "/actions/folder/delete.php");
-		elgg_register_action("file_tools/file/hide", dirname(__FILE__) . "/actions/file/hide.php");
 		
+		elgg_register_action("file_tools/file/hide", dirname(__FILE__) . "/actions/file/hide.php");
+		elgg_register_action("file_tools/file/upload", dirname(__FILE__) . "/actions/file/upload.php");
+		elgg_register_action("file_tools/file/delete", dirname(__FILE__) . "/actions/file/delete.php");
+
 		elgg_register_action("file/move", dirname(__FILE__) . "/actions/file/move.php");
 		elgg_register_action("file/bulk_delete", dirname(__FILE__) . "/actions/file/bulk_delete.php");
 		

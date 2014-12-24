@@ -45,10 +45,10 @@
 	$form_data .= elgg_view("input/text", array("name" => "title", "value" => $title));
 	$form_data .= "</div>";
 	
-	$form_data .= "<div>";
+	/*$form_data .= "<div>";
 	$form_data .= "<label>" . elgg_echo("file_tools:forms:edit:description") . "</label>";
 	$form_data .= elgg_view("input/longtext", array("name" => "description", "value" => $desc));
-	$form_data .= "</div>";
+	$form_data .= "</div>";*/
 	
 	$form_data .= "<div>";
 	$form_data .= "<label>" . elgg_echo("file_tools:forms:edit:parent") . "</label>";

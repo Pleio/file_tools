@@ -38,7 +38,11 @@
 					if(!empty($page[2])) {
 						elgg_set_page_owner_guid($page[2]);
 					}
+				
 					$include_file = dirname(dirname(__FILE__)) . "/pages/file/new.php";
+				} elseif ($page[1] == 'edit') {
+					set_input("guid", $page[2]);
+					$include_file = dirname(dirname(__FILE__)) . "/pages/file/edit.php";
 				} elseif($page[1] == 'download') {
 					$include_file = dirname(dirname(__FILE__)) . "/pages/file/download.php";
 				}
