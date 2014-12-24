@@ -1,34 +1,35 @@
 <?php
 
-	$widget = $vars["entity"];
-	$group = $widget->getOwnerEntity();
+$widget = $vars["entity"];
+$group = $widget->getOwnerEntity();
 
-	$number = sanitise_int($widget->file_count, false);
-	if(empty($number)){
-		$number = 4;
-	}
+$number = sanitise_int($widget->file_count, false);
+if(empty($number)){
+	$number = 10;
+}
 
-	//get the group's files
-	$options = array(
-		"type" => "object",
-		"subtype" => "file",
-		"container_guid" => $group->getGUID(),
-		"limit" => $number,
-		"pagination" => false,
-		"full_view" => false
-	);
+$wheres = array();
+$wheres[] = "NOT EXISTS (
+			SELECT 1 FROM " . elgg_get_config("dbprefix") . "entity_relationships r
+			WHERE r.guid_two = e.guid AND
+			r.relationship = '" . FILE_TOOLS_RELATIONSHIP . "')";
 
-	//if there are some files, go get them
-	if ($files = elgg_list_entities($options)) {
-		//display in list mode
-		echo $files;
-	} else {
-		echo elgg_echo("file:none");
-	}
-	
-	$new_link = elgg_view("output/url", array(
-				"href" => "file/add/" . $group->getGUID(),
-				"text" => elgg_echo("file:add"),
-				"is_trusted" => true,
-	));
-	echo "<div>" . $new_link . "</div>";
+$options = array(
+	'type' => 'object',
+	'subtype' => 'file',
+	'container_guid' => $group->guid,
+	'joins' => "INNER JOIN {$CONFIG->dbprefix}objects_entity o ON (o.guid = e.guid)",
+	'order_by' => 'o.title',
+	'wheres' => $wheres,
+	'limit' => $number
+);
+
+$files = elgg_get_entities_from_metadata($options);
+
+echo elgg_view("file_tools/list/files", array(
+	"files" => $files,
+	"view_only" => true,
+	"sort_by" => "title",
+	"direction" => "ASC",
+	"limit" => $number
+));

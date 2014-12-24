@@ -2,6 +2,7 @@
 
 	$files = elgg_extract("files", $vars, array());
 	$folder = elgg_extract("folder", $vars);
+	$view_only = elgg_extract("view_only", $vars, false);
 	$show_more = (bool) elgg_extract("show_more", $vars, false);
 	$limit = (int) elgg_extract("limit", $vars, file_tools_get_list_length());
 	$offset = (int) elgg_extract("offset", $vars, 0);
@@ -9,7 +10,9 @@
 	// only show the header if offset == 0
 	$folder_content = "";
 	if (empty($offset)) {
-		$folder_content = elgg_view("file_tools/breadcrumb", array("entity" => $folder));
+		if (!$view_only) {
+			$folder_content = elgg_view("file_tools/breadcrumb", array("entity" => $folder));
+		}
 		
 		if(!($sub_folders = file_tools_get_sub_folders($folder))){
 			$sub_folders = array();
@@ -53,7 +56,7 @@
 		}
 		
 		// only show selectors on the first load
-		if (empty($offset)) {
+		if (empty($offset) && !$view_only) {
 			$files_content .= "<div class='clearfix'>";
 			
 			if(elgg_get_page_owner_entity()->canEdit()) {
