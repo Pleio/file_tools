@@ -15,19 +15,6 @@
 		"days" 	=> elgg_echo("file_tools:usersettings:time:days")
 	);
 		
-	// sorting
-	$sort_options =  array(
-		"e.time_created" 	=> elgg_echo("file_tools:list:sort:time_created"),
-		"oe.title" 			=> elgg_echo("title"),
-		"oe.description"	=> elgg_echo("description"),
-		"simpletype" 		=> elgg_echo("file_tools:list:sort:type")
-	);
-		
-	$sort_direction = array(
-		"asc" 	=> elgg_echo("file_tools:list:sort:asc"),
-		"desc"	=> elgg_echo("file_tools:list:sort:desc")
-	);
-	
 	$list_length = (int) $settings->list_length;
 	if ($list_length == 0) {
 		$list_length = 50;
@@ -57,15 +44,7 @@
 	echo "<label>" . elgg_echo("file_tools:usersettings:time:default") . "</label>";
 	echo "&nbsp;" . elgg_view("input/dropdown", array("name" => "params[file_tools_default_time_display]", "options_values" => $time_notation_options, "value" => $settings->file_tools_default_time_display));
 	echo "</div>";
-	
-	// default sorting options
-	echo "<div>";
-	echo "<label>" . elgg_echo("file_tools:settings:sort:default") . "</label>";
-	echo "&nbsp;" . elgg_view("input/dropdown", array("name" => "params[sort]", "value" =>  $settings->sort, "options_values" => $sort_options));
-	echo "&nbsp;";
-	echo elgg_view("input/dropdown", array("name" => "params[sort_direction]", "value" =>  $settings->sort_direction, "options_values" => $sort_direction));
-	echo "</div>";
-	
+		
 	// limit folder listing
 	echo "<div>";
 	echo "<label>" . elgg_echo("file_tools:settings:list_length") . "</label>";

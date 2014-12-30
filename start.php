@@ -12,9 +12,6 @@
 	function file_tools_init() {
 		// extend CSS
 		elgg_extend_view("css/elgg", "file_tools/css/site");
-		if(file_tools_use_folder_structure()){
-			elgg_extend_view("groups/edit", "file_tools/group_settings");
-		}
 		
 		// extend js
 		elgg_extend_view("js/elgg", "file_tools/js/site");
@@ -42,6 +39,9 @@
 		
 		// register group option to allow management of file tree structure
 		add_group_tool_option("file_tools_structure_management", elgg_echo("file_tools:group_tool_option:structure_management"));
+
+		// register group option to allow group members to overwrite all their files
+		add_group_tool_option("file_tools_file_management", elgg_echo("file_tools:group_tool_option:file_management"), false);
 		
 		// register widgets
 		// add folder widget
@@ -63,8 +63,9 @@
 		
 		// register hooks
 		elgg_register_plugin_hook_handler("register", "menu:entity", "file_tools_entity_menu_hook");
-		elgg_register_plugin_hook_handler("permissions_check:metadata", "object", "file_tools_can_edit_metadata_hook");
-// 		elgg_register_plugin_hook_handler("access:collections:write", "all", "file_tools_write_acl_plugin_hook", 550);
+
+		elgg_register_plugin_hook_handler("permissions_check", "object", "file_tools_can_edit_metadata_hook");
+
 		elgg_register_plugin_hook_handler("route", "file", "file_tools_file_route_hook");
 		elgg_register_plugin_hook_handler("widget_url", "widget_manager", "file_tools_widget_url_hook");
 		
@@ -72,7 +73,6 @@
 		elgg_register_plugin_hook_handler("register", "menu:file_tools_folder_sidebar_tree", "file_tools_folder_sidebar_tree_hook");
 		
 		// register actions
-		elgg_register_action("file_tools/groups/save_sort", dirname(__FILE__) . "/actions/groups/save_sort.php");
 		elgg_register_action("file_tools/folder/edit", dirname(__FILE__) . "/actions/folder/edit.php");
 		elgg_register_action("file_tools/folder/delete", dirname(__FILE__) . "/actions/folder/delete.php");
 		elgg_register_action("file_tools/folder/reorder", dirname(__FILE__) . "/actions/folder/reorder.php");

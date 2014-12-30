@@ -146,10 +146,8 @@
 	));
 	$body .= "</div>";
 	
-	if($page_owner->canEdit() || ($page_owner instanceof ElggGroup && $page_owner->isMember() && $page_owner->file_tools_structure_management_enable != "no")) { 
-		elgg_load_js("lightbox");
-		elgg_load_css("lightbox");
-	}
+	elgg_load_js("lightbox");
+	elgg_load_css("lightbox");
 	
 	// output file tree
 	echo elgg_view_module("aside", "", $body, array("id" => "file_tools_list_tree_container"));

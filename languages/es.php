@@ -4,12 +4,7 @@
 		'file_tools' => "File Tools",
 	
 		'file_tools:file:actions' => 'Acciones',
-	
-		'file_tools:list:sort:type' => 'Tipo',
-		'file_tools:list:sort:time_created' => 'Hora de creación',
-		'file_tools:list:sort:asc' => 'Ascendente',
-		'file_tools:list:sort:desc' => 'Descendente',
-	
+		
 		// object name
 		'item:object:folder' => "Carpeta de archivos",
 	
@@ -131,7 +126,6 @@
 		//settings
 		'file_tools:settings:allowed_extensions' => 'Extensiones permitidas (separadas por comas)',
 		'file_tools:settings:user_folder_structure' => 'Usar estructura de carpetas',
-		'file_tools:settings:sort:default' => 'Opciones de ordenación de carpetas',
 	
 		'file:type:application' => 'Aplicación',
 		'file:type:text' => 'Texto',

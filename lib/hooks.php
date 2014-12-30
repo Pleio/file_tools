@@ -8,13 +8,23 @@
 				$entity = elgg_extract("entity", $params);
 				$user = elgg_extract("user", $params);
 	
-				if(elgg_instanceof($entity, "object", FILE_TOOLS_SUBTYPE)) {
-					$container_entity = $entity->getContainerEntity();
-						
-					if(elgg_instanceof($container_entity, "group") && $container_entity->isMember($user) && ($container_entity->file_tools_structure_management_enable != "no")) {
-						$result = true;
-					}
+				$container = $entity->getContainerEntity();
+				if (!elgg_instanceof($container, "group")) {
+					return $result;
 				}
+
+				if (!$container->isMember($user)) {
+					return $result;
+				}
+
+				if ($container->file_tools_structure_management_enable == "yes" && elgg_instanceof($entity, "object", FILE_TOOLS_SUBTYPE)) {
+					$result = true;
+				}
+
+				if ($container->file_tools_file_management_enable == "yes" && elgg_instanceof($entity, "object", "file")) {
+					$result = true;
+				}
+
 			}
 		}
 	
@@ -44,24 +54,7 @@
 	
 		return $result;
 	}
-	
-	function file_tools_write_acl_plugin_hook($hook, $type, $returnvalue, $params) {
-		$result = $returnvalue;
 		
-		if(!empty($params) && is_array($params)) {
-			
-			if(elgg_in_context("file_tools") && ($page_owner = elgg_get_page_owner_entity()) && elgg_instanceof($page_owner, "group")){
-				$result = array(
-					$page_owner->group_acl => elgg_echo("groups:group") . ": " . $page_owner->name,
-					ACCESS_LOGGED_IN => elgg_echo("LOGGED_IN"),
-					ACCESS_PUBLIC => elgg_echo("PUBLIC")
-				);
-			}
-		}
-		
-		return $result;
-	}
-	
 	function file_tools_file_route_hook($hook, $type, $returnvalue, $params){
 		$result = $returnvalue;
 		
@@ -264,4 +257,3 @@
 		
 		return $result;
 	}
-	
