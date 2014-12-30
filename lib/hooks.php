@@ -252,9 +252,9 @@
 					}
 				} elseif(elgg_instanceof($entity, "object", "file")){
 					$result[] = ElggMenuItem::factory(array(
-						"name" => "download",
-						"text" => elgg_view_icon("download"),
-						"href" => "file/download/" . $entity->getGUID(),
+						"name" => "view",
+						"text" => elgg_view_icon("speech-bubble"),
+						"href" => "file/view/" . $entity->getGUID() . "/" . elgg_get_friendly_title($entity->title),
 						"title" => elgg_echo("file:download"),
 						"priority" => 200
 					));

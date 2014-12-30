@@ -34,6 +34,7 @@
 		elgg_register_page_handler("file_tools", "file_tools_page_handler");
 		
 		// make our own URLs for folders
+		elgg_register_entity_url_handler("object", "file", "file_tools_url_handler");
 		elgg_register_entity_url_handler("object", FILE_TOOLS_SUBTYPE, "file_tools_folder_url_handler");
 		
 		// make our own URLs for folder icons
@@ -110,6 +111,10 @@
 		}
 		
 		return $result;
+	}
+
+	function file_tools_url_handler($entity) {
+		return "file/download/" . $entity->getGUID();
 	}
 
 	// register default Elgg events
