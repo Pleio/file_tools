@@ -114,7 +114,11 @@
 	}
 
 	function file_tools_url_handler($entity) {
-		return "file/download/" . $entity->getGUID();
+		if (elgg_is_active_plugin("odt_editor") && $entity->getMimetype() == "application/vnd.oasis.opendocument.text") {
+			return "file/view/" . $entity->getGUID() . "/" . elgg_get_friendly_title($entity->title);
+		} else {
+			return "file/download/" . $entity->getGUID();
+		}
 	}
 
 	// register default Elgg events
