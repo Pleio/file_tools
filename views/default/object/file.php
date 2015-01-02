@@ -143,7 +143,7 @@
 		if(file_tools_use_folder_structure()){
 			$file_icon = elgg_view_entity_icon($file, "tiny", array("img_class" => "file-tools-icon-tiny"));
 			
-			if(elgg_in_context("file_tools_selector")){
+			if(elgg_in_context("file_tools")){
 				$file_icon_alt = elgg_view("input/checkbox", array("name" => "file_guids[]", "value" => $file->getGUID(), "default" => false));
 			}
 			
