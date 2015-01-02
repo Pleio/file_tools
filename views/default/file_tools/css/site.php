@@ -6,6 +6,12 @@
 	height: 20px;
 }
 
+.file-tools-widget-button {
+	float: right;
+	margin-left: 4px;
+	margin-bottom: 5px;
+}
+
 .elgg-photo.file-tools-icon-tiny {
 	width: 16px;
 	height: 16px;

@@ -26,6 +26,20 @@ $options = array(
 
 $files = elgg_get_entities_from_metadata($options);
 
+echo elgg_view('output/url', array(
+	'name' => 'file_tools:new:title',
+	'text' => elgg_echo("file_tools:new:title"),
+	'id' => 'file_tools_list_new_folder_toggle',
+	'class' => 'file-tools-widget-button elgg-button elgg-button-action'
+));
+
+echo elgg_view('output/url', array(
+	'name' => 'file_tools:upload:file',
+	'text' => elgg_echo("file:upload"),
+	'id' => 'file_tools_list_upload_file_toggle',
+	'class' => 'file-tools-widget-button elgg-button elgg-button-action'
+));
+
 echo elgg_view("file_tools/list/files", array(
 	"files" => $files,
 	"view_only" => true,
