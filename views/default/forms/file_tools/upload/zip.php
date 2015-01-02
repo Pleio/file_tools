@@ -1,7 +1,8 @@
 <?php
 
 	$page_owner = elgg_get_page_owner_entity();
-	
+	$access_id = elgg_extract('access_id', $vars, ACCESS_DEFAULT);
+
 	$form_body = "<div>" . elgg_echo("file_tools:upload:form:zip:info") . "</div>";
 	
 	$form_body .= "<div>";
@@ -18,7 +19,7 @@
 	
 	$form_body .= "<div>";
 	$form_body .= "<label>" . elgg_echo("access") . "</label><br />";
-	$form_body .= elgg_view("input/access", array("name" => "access_id"));
+	$form_body .= elgg_view("input/access", array("name" => "access_id", "value" => $access_id));
 	$form_body .= "</div>";
 	
 	$form_body .= "<div class='elgg-foot'>";

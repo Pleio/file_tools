@@ -198,11 +198,15 @@ if ($new_file) {
 		} else {
 			$forward_url = "file/group/$container->guid/all";
 		}
-
-		forward($forward_url);
 	} else {
-		forward("file/owner/$container->username");
+		if ($folder_guid) {
+			$forward_url = "file/owner/$container->name#$folder_guid";
+		} else {
+			$forward_url = "file/owner/$container->name";
+		}
 	}
+
+	forward($forward_url);
 
 } else {
 	if ($guid) {
@@ -223,5 +227,5 @@ if ($new_file) {
 		forward("file/group/" . $container_guid . "/all#" . $folder_guid);
 	}
 
-	forward($file->getURL());
+	forward("file/all");
 }	

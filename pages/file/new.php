@@ -25,8 +25,8 @@
 			"enctype" => "multipart/form-data",
 			"class" => "hidden"
 		);
+
 		$body_vars = array();
-		
 		$multi_vars = $form_vars;
 		$multi_vars["id"] = "file-tools-multi-form";
 		$multi_vars["action"] = "action/file/upload";
@@ -47,17 +47,24 @@
 			default:
 				elgg_load_library("elgg:file");
 				
-				$body_vars = file_prepare_form_vars();
-				
+				$body_vars = file_prepare_form_vars();				
+
 				unset($single_vars["class"]);
 				break;
 		}
+
+		$parent = get_input("folder_guid", 0);
+		if(!empty($parent) && ($parent_entity = get_entity($parent))) {
+			$body_vars['access_id'] = $parent_entity->access_id;
+		} else {
+			$body_vars['access_id'] = ACCESS_DEFAULT;
+		}		
 		
 		// build different forms
 		$body = "<div id='file-tools-upload-wrapper'>";
 		$body .= elgg_view_form("file_tools/file/upload", $single_vars, $body_vars);
-		$body .= elgg_view_form("file_tools/upload/multi", $multi_vars);
-		$body .= elgg_view_form("file_tools/upload/zip", $zip_vars);
+		$body .= elgg_view_form("file_tools/upload/multi", $multi_vars, $body_vars);
+		$body .= elgg_view_form("file_tools/upload/zip", $zip_vars, $body_vars);
 		$body .= "</div>";
 		
 		$tabs = elgg_view("file_tools/upload_tabs", array("upload_type" => $upload_type));

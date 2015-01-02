@@ -6,8 +6,9 @@
 	 */
 
 	$page_owner = elgg_get_page_owner_entity();
-	$container_guid = $page_owner->getGUID();
-	
+	$container_guid = elgg_extract('container_guid', $vars, elgg_get_logged_in_user_guid());
+	$access_id = elgg_extract('access_id', $vars, ACCESS_DEFAULT);
+
 	if(elgg_instanceof($page_owner, "group", null, "ElggGroup")){
 		$return_url = $vars["url"] . "file/group/" . $page_owner->getGUID() . "/all";
 	} else {
@@ -51,7 +52,7 @@
 	<div>
 		<label>
 			<?php echo elgg_echo('access'); ?><br />
-			<?php echo elgg_view('input/access', array('name' => 'access_id', 'id' => 'file_tools_file_access_id')); ?>
+			<?php echo elgg_view('input/access', array('name' => 'access_id', 'id' => 'file_tools_file_access_id', 'value' => $access_id)); ?>
 		</label>
 	</div>
 	

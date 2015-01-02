@@ -9,11 +9,10 @@
 $title = elgg_extract('title', $vars, '');
 $desc = elgg_extract('description', $vars, '');
 $tags = elgg_extract('tags', $vars, '');
+
 $access_id = elgg_extract('access_id', $vars, ACCESS_DEFAULT);
-$container_guid = elgg_extract('container_guid', $vars);
-if (!$container_guid) {
-	$container_guid = elgg_get_logged_in_user_guid();
-}
+$container_guid = elgg_extract('container_guid', $vars, elgg_get_logged_in_user_guid());
+
 $guid = elgg_extract('guid', $vars, null);
 
 if ($guid) {
@@ -29,15 +28,6 @@ if ($guid) {
 	<label><?php echo $file_label; ?></label><br />
 	<?php echo elgg_view('input/file', array('name' => 'upload')); ?>
 </div>
-<!--
-<div>
-	<label><?php echo elgg_echo('title'); ?></label><br />
-	<?php echo elgg_view('input/text', array('name' => 'title', 'value' => $title)); ?>
-</div>
-<div>
-	<label><?php echo elgg_echo('description'); ?></label>
-	<?php echo elgg_view('input/longtext', array('name' => 'description', 'value' => $desc)); ?>
-</div>-->
 <div>
 	<label><?php echo elgg_echo('tags'); ?></label>
 	<?php echo elgg_view('input/tags', array('name' => 'tags', 'value' => $tags)); ?>
