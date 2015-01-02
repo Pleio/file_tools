@@ -6,6 +6,12 @@
 	height: 20px;
 }
 
+.elgg-photo.file-tools-icon-tiny {
+	width: 16px;
+	height: 16px;
+	padding: 0px;
+}
+
 .elgg-menu-file-tools-folder-breadcrumb > li:after {
 	padding: 0 4px;
 	content: ">";
@@ -23,6 +29,11 @@
 	height: 100%;
 	position: absolute;
 	top: 0;
+}
+
+#file_tools_list_files .elgg-image img {
+	width: 20px;
+	height: 20px;
 }
 
 #file_tools_list_files .ui-draggable,
