@@ -11,29 +11,7 @@
 	
 	if(!empty($page_owner) && (elgg_instanceof($page_owner, "user") || elgg_instanceof($page_owner, "group"))) {
 		group_gatekeeper();
-		
-		if(empty($sort_by)){
-			$sort_value = "e.time_created";
-			if(elgg_instanceof($page_owner, "group") && !empty($page_owner->file_tools_sort)){
-				$sort_value = $page_owner->file_tools_sort;
-			} elseif($site_sort_default = elgg_get_plugin_setting("sort", "file_tools")){
-				$sort_value = $site_sort_default;
-			}
-		
-			$sort_by = $sort_value;
-		}
-		
-		if(empty($direction)){
-			$sort_direction_value = "asc";
-			if(elgg_instanceof($page_owner, "group") && !empty($page_owner->file_tools_sort_direction)){
-				$sort_direction_value = $page_owner->file_tools_sort_direction;
-			} elseif($site_sort_direction_default = elgg_get_plugin_setting("sort_direction", "file_tools")){
-				$sort_direction_value = $site_sort_direction_default;
-			}
-		
-			$direction = $sort_direction_value;
-		}
-
+				
 		$wheres = array();
 		$wheres[] = "NOT EXISTS (
 					SELECT 1 FROM " . elgg_get_config("dbprefix") . "entity_relationships r
@@ -49,12 +27,7 @@
 		);
 
 		$files_options["joins"][] = "JOIN " . elgg_get_config("dbprefix") . "objects_entity oe ON oe.guid = e.guid";
-
-		if($sort_by == "simpletype") {
-			$files_options["order_by_metadata"] = array("name" => "mimetype", "direction" => $direction);
-		} else {
-			$files_options["order_by"] = $sort_by . " " . $direction;
-		}
+		$files_options["order_by"] = "oe.title";
 
 		$folder = false;
 		if($folder_guid !== false) {
