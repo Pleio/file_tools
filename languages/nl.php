@@ -98,6 +98,7 @@ $language = array (
   'file_tools:upload:form:info' => 'Klik op bladeren om (meerdere) bestanden te selecteren',
   'file_tools:upload:form:zip:info' => 'Je kunt een zip file uploaden. Het zal worden uitgepakt en elk bestand en map zal individueel worden aangemaakt. Bestandstypes die niet worden toegestaan zullen worden overgeslagen.',
   'file_tools:settings:user_folder_structure' => 'Gebruik de mappen structuur',
+  'file_tools:discussion' => 'Discussie',
   'file:type:application' => 'Applicatie',
   'file:type:text' => 'Bestand',
   'widgets:group_files:description' => 'Toon de laatste groep bestanden',
