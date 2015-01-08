@@ -131,7 +131,8 @@
 		'file_tools:settings:user_folder_structure' => 'Use folder structure',
 		'file_tools:settings:list_length' => 'How many files to show in the listing',
 		'file_tools:settings:list_length:unlimited' => 'Unlimited',
-	
+		'file_tools:discussion' => 'Discussion',
+
 		'file:type:application' => 'Application',
 		'file:type:text' => 'Text',
 
