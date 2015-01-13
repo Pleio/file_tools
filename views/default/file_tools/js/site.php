@@ -190,8 +190,6 @@ elgg.file_tools.tree.init = function() {
 			}
 		});
 	}
-
-	$('#file-tools-folder-tree').hide();
 }
 
 elgg.file_tools.breadcrumb_click = function(event) {
@@ -308,8 +306,11 @@ elgg.file_tools.upload_file = function(event) {
 	var link = elgg.get_site_url() + "file_tools/file/new/" + elgg.get_page_owner_guid() + "?folder_guid=" + hash;
 	
 	$.fancybox({
-		href: link,
-		titleShow: false
+		'href': link,
+		'titleShow': false,
+		'onComplete': function() {
+			elgg.file_tools.init();
+		}
 	});
 }
 

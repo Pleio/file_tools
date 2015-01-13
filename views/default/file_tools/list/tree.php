@@ -15,6 +15,7 @@
 	elgg_load_css("jquery.tree");
 	
 	elgg_load_js("jquery.hashchange");
+	elgg_load_js("jquery.uploadify");
 ?>
 <script type="text/javascript">
 	function file_tools_get_selected_tree_folder_id(){

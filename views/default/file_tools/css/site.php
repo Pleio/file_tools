@@ -55,3 +55,7 @@
 #file-tools-multi-form .uploadify-queue-item {
 	max-width: 100%;
 }
+
+.file-tools-short-editor {
+	height: 125px;
+}
