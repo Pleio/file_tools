@@ -75,52 +75,65 @@
 		return false;
 	}
 
-	function file_tools_get_folders($container_guid = 0) {
-		$result = false;
-		
+	function file_tools_get_folders($container_guid = 0) {	
 		if(empty($container_guid)) {
 			$container_guid = elgg_get_page_owner_guid();
 		}
 		
-		if(!empty($container_guid)) {
-			$options = array(
-				"type" => "object",
-				"subtype" => FILE_TOOLS_SUBTYPE,
-				"container_guid" => $container_guid,
-				"limit" => false
-			);
-
-			if($folders = elgg_get_entities($options)) {
-				$parents = array();
-
-				foreach($folders as $folder) {
-					$parent_guid = (int) $folder->parent_guid;
-					
-					if(!empty($parent_guid)) {
-						if($temp = get_entity($parent_guid)) {
-							if($temp->getSubtype() != FILE_TOOLS_SUBTYPE) {
-								$parent_guid = 0;
-							}
-						} else {
-							$parent_guid = 0;
-						}
-					} else {
-						$parent_guid = 0;
-					}
-					
-					if(!array_key_exists($parent_guid, $parents)) {
-						$parents[$parent_guid] = array();
-					}
-					
-					$parents[$parent_guid][] = $folder;
-				}
-				
-				$result = file_tools_sort_folders($parents, 0);
-			}
+		if(empty($container_guid)) {
+			return false;
 		}
-		return $result;
+
+
+		$db_prefix = elgg_get_config('dbprefix');
+		$options = array(
+			"type" => "object",
+			"subtype" => FILE_TOOLS_SUBTYPE,
+			"container_guid" => $container_guid,
+			"limit" => false,
+			"joins" => "JOIN {$db_prefix}objects_entity oe ON e.guid = oe.guid",
+			"order_by" => "oe.title ASC"
+		);
+
+		$folders = elgg_get_entities($options);
+
+		if (!$folders) {
+			return false;
+		}
+
+		$children = array();
+		foreach($folders as $folder) {
+			$parent_guid = (int) $folder->parent_guid;
+			
+			if(empty($parent_guid)) {
+				$parent_guid = 0;
+			}
+			
+			if(!array_key_exists($parent_guid, $children)) {
+				$children[$parent_guid] = array();
+			}
+			
+			$children[$parent_guid][] = $folder;
+		}
+		
+		$get_folder = function($parent_guid) use (&$get_folder, $children) {
+			$result = array();
+
+			$i = 0;
+			foreach ($children[$parent_guid] as $child) {
+				$result[$i] = array(
+					'folder' => $child,
+					'children' => $get_folder($child->guid)
+				);
+				$i++;
+			}
+
+			return $result;
+		};
+
+		return $get_folder(0);
 	}
-	
+		
 	function file_tools_build_select_options($folders, $depth = 0) {
 		$result = array();
 		
@@ -172,37 +185,7 @@
 		
 		return $result;
 	}
-	
-	function file_tools_sort_folders($folders, $parent_guid = 0) {
-		$result = false;
-		
-		if(array_key_exists($parent_guid, $folders)) {
-			$result = array();
-			
-			foreach($folders[$parent_guid] as $subfolder) {
-				$children = file_tools_sort_folders($folders, $subfolder->getGUID());
-				
-				$order = $subfolder->order;
-				if(empty($order)) {
-					$order = 0;
-				}
-				
-				while(array_key_exists($order, $result)) {
-					$order++;
-				}
-				
-				$result[$order] = array(
-					"folder" => $subfolder,
-					"children" => $children
-				);
-			}
-			
-			ksort($result);
-		}
-		
-		return $result;
-	}
-	
+
 	function file_tools_get_sub_folders($folder = false, $list = false) {
 		$result = false;
 		
@@ -252,7 +235,6 @@
 						"name" => "folder_" . $folder->getGUID(),
 						"text" => $folder->title,
 						"href" => "#" . $folder->getGUID(),
-						"priority" => $folder->order
 					));
 					
 					if($children = elgg_extract("children", $level)){
