@@ -22,24 +22,6 @@
 			}
 		}
 		
-		// reorder
-		if(!empty($order) && !is_array($order)) {
-			$order = array($order);
-		}
-		
-		if(!empty($order) && !is_null($parent_guid)) {
-			foreach($order as $index => $order_guid) {
-				if($folder = get_entity($order_guid)) {
-					if(elgg_instanceof($folder, "object", FILE_TOOLS_SUBTYPE) && $folder->canEditMetadata("order")) {
-						if($folder->parent_guid == $parent_guid) {
-							$folder->order = $index;
-							$folder->save();
-						}
-					}
-				}
-			}
-		}
-		
 		system_message(elgg_echo("file_tools:action:folder:reorder:success"));
 	} else {
 		register_error(elgg_echo("InvalidParameterException:MissingParameter"));
