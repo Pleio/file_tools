@@ -120,12 +120,14 @@
 			$result = array();
 
 			$i = 0;
-			foreach ($children[$parent_guid] as $child) {
-				$result[$i] = array(
-					'folder' => $child,
-					'children' => $get_folder($child->guid)
-				);
-				$i++;
+			if (array_key_exists($parent_guid, $children)) {
+				foreach ($children[$parent_guid] as $child) {
+					$result[$i] = array(
+						'folder' => $child,
+						'children' => $get_folder($child->guid)
+					);
+					$i++;
+				}
 			}
 
 			return $result;
