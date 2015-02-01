@@ -155,10 +155,21 @@
 			$excerpt = elgg_get_excerpt($file->description);
 		}
 		
+		$title_options = array(
+			'text' => $file->title,
+			'href' => $file->getURL(),
+			'is_trusted' => true
+		);
+
+		if (file_tools_is_odt($file)) {
+			$title_options['target'] = '_blank';
+		}
+
 		$params = array(
 			"entity" => $file,
 			"metadata" => $entity_menu,
 			"subtitle" => $subtitle,
+			"title" => elgg_view('output/url', $title_options),
 			"tags" => $tags,
 			"content" => $excerpt
 		);

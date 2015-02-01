@@ -115,11 +115,11 @@
 	}
 
 	function file_tools_url_handler($entity) {
-		if (elgg_is_active_plugin("odt_editor") && $entity->getMimetype() == "application/vnd.oasis.opendocument.text") {
+		if (file_tools_is_odt($entity)) {
 			return "file/view/" . $entity->getGUID() . "/" . elgg_get_friendly_title($entity->title);
 		}
 
-		if (elgg_get_context() == "file_tools") {
+		if (elgg_in_context("file_tools")) {
 			return "file/download/" . $entity->getGUID();
 		} else {
 			return "file/view/" . $entity->getGUID() . "/" . elgg_get_friendly_title($entity->title);

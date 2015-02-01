@@ -963,3 +963,15 @@
 			}
 		}	
 	}
+
+	function file_tools_is_odt(ElggFile $file) {
+		if (!elgg_is_active_plugin("odt_editor")) {
+			return false;
+		}
+
+		if ($file->getMimetype() == "application/vnd.oasis.opendocument.text") {
+			return true;
+		} else {
+			return false;
+		}
+	}
