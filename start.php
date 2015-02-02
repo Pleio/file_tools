@@ -13,6 +13,10 @@
 		// extend CSS
 		elgg_extend_view("css/elgg", "file_tools/css/site");
 		
+		if (file_tools_use_folder_structure()) {
+			elgg_extend_view("groups/edit", "file_tools/group_settings");
+		}
+
 		// extend js
 		elgg_extend_view("js/elgg", "file_tools/js/site");
 		
@@ -86,7 +90,8 @@
 
 		elgg_register_action("file/move", dirname(__FILE__) . "/actions/file/move.php");
 		elgg_register_action("file/bulk_delete", dirname(__FILE__) . "/actions/file/bulk_delete.php");
-		
+
+		elgg_register_action("file_tools/groups/save_sort",  dirname(__FILE__) . "/actions/groups/save_sort.php");
 	}
 	
 	function file_tools_pagesetup(){

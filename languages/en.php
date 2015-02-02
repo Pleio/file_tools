@@ -57,7 +57,14 @@
 	
 		'file_tools:list:files:options:sort_title' => 'Sorting',
 		'file_tools:list:files:options:view_title' => 'View',
-	
+
+		'file_tools:settings:sort:default' => 'Default files sorting',
+		'file_tools:settings:sort' => 'Sort on: ',
+		'file_tools:settings:sort:time_created' => 'Time created',
+		'file_tools:settings:sort:filename' => 'Filename',
+		'file_tools:settings:sort:asc' => 'Ascending',
+		'file_tools:settings:sort:desc' => 'Descending',
+
 		'file_tools:usersettings:time' => 'Time display',
 		'file_tools:usersettings:time:description' => 'Change the way the file/folder time is displayed ',
 		'file_tools:usersettings:time:default' => 'Default time display',
@@ -148,7 +155,7 @@
 		'widgets:file_tree:more' => "More file folders",
 	
 		'widget:file:edit:show_only_featured' => 'Show only featured files',
-		
+
 		'widget:file_tools:show_file' => 'Feature file (widget)',
 		'widget:file_tools:hide_file' => 'Unfeature file',
 	
@@ -156,7 +163,7 @@
 		
 		// Group files
 		'widgets:group_files:description' => "Show the latest group files",
-		
+
 		// index_file
 		'widgets:index_file:description' => "Show the latest files on your community",
 	

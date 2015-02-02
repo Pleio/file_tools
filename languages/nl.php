@@ -101,6 +101,12 @@ $language = array (
   'file_tools:discussion' => 'Discussie',
   'file:type:application' => 'Applicatie',
   'file:type:text' => 'Bestand',
+  'file_tools:settings:sort:default' => 'Standaard bestandssortering',
+  'file_tools:settings:sort' => 'Sorteer op: ',
+  'file_tools:settings:sort:time_created' => 'Datum',
+  'file_tools:settings:sort:filename' => 'Bestandsnaam',
+  'file_tools:settings:sort:asc' => 'Oplopend',
+  'file_tools:settings:sort:desc' => 'Aflopend',  
   'widgets:group_files:description' => 'Toon de laatste groep bestanden',
 );
 add_translation("nl", $language);

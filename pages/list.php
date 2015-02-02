@@ -3,14 +3,28 @@
 	$page_owner 		= elgg_get_page_owner_entity();
 	$folder_guid 		= (int) get_input("folder_guid", 0);
 	$draw_page 			= get_input("draw_page", true);
-
-	$sort_by 			= get_input("sort_by");
-	$direction 			= get_input("direction");
 	$limit				= file_tools_get_list_length();
 	$offset				= (int) get_input("offset", 0);
 	
 	if(!empty($page_owner) && (elgg_instanceof($page_owner, "user") || elgg_instanceof($page_owner, "group"))) {
 		group_gatekeeper();
+
+		$translation = array(
+			"filename" => "oe.title",
+			"time_created" => "e.time_created"
+		);
+
+		if (in_array($page_owner->file_tools_sort_on, $translation)) {
+			$order = $translation[$page_owner->file_tools_sort_on];
+		} else {
+			$order = "oe.title";
+		}
+
+		if (in_array($page_owner->file_tools_sort_on_direction, array('ASC','DESC'))) {
+			$direction = $page_owner->file_tools_sort_on_direction;
+		} else {
+			$direction = "ASC";
+		}
 				
 		$wheres = array();
 		$wheres[] = "NOT EXISTS (
@@ -23,11 +37,10 @@
 			"subtype" => "file",
 			"limit" => $limit,
 			"offset" => $offset,
+			"joins" => array("JOIN " . elgg_get_config("dbprefix") . "objects_entity oe ON oe.guid = e.guid"),
+			"order_by" => $order . " " . $direction,
 			"container_guid" => $page_owner->getGUID()
 		);
-
-		$files_options["joins"][] = "JOIN " . elgg_get_config("dbprefix") . "objects_entity oe ON oe.guid = e.guid";
-		$files_options["order_by"] = "oe.title";
 
 		$folder = false;
 		if($folder_guid !== false) {
@@ -58,8 +71,6 @@
 			echo elgg_view("file_tools/list/files", array(
 				"folder" => $folder,
 				"files" => $files,
-				"sort_by" => $sort_by,
-				"direction" => $direction,
 				"show_more" => $show_more,
 				"limit" => $limit,
 				"offset" => $offset
