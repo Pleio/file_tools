@@ -14,7 +14,7 @@
 			"time_created" => "e.time_created"
 		);
 
-		if (in_array($page_owner->file_tools_sort_on, $translation)) {
+		if (array_key_exists($page_owner->file_tools_sort_on, $translation)) {
 			$order = $translation[$page_owner->file_tools_sort_on];
 		} else {
 			$order = "oe.title";
