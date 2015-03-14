@@ -57,5 +57,5 @@
 }
 
 .file-tools-short-editor {
-	height: 125px;
+	height: 75px;
 }
