@@ -28,8 +28,10 @@
 						"subtype" => "file",
 						"limit" => false,
 						"container_guid" => $widget->getOwnerGUID(),
+						"joins" => "INNER JOIN {$CONFIG->dbprefix}objects_entity o ON (o.guid = e.guid)",
 						"relationship" => FILE_TOOLS_RELATIONSHIP,
 						"relationship_guid" => $folder->getGUID(),
+						"order_by" => "o.title ASC",
 						"inverse_relationship" => false,
 					);
 					$files = elgg_get_entities_from_relationship($files_options);
