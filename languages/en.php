@@ -40,6 +40,7 @@
 		'file_tools:list:alert:not_all_deleted' => 'Not all files could be deleted',
 		'file_tools:list:alert:none_selected' => 'No items selected',
 		
+		'file_tools:upload:file' => "Upload",
 	
 		'file_tools:list:tree:info' => "Did you know?",
 		'file_tools:list:tree:info:1' => "You can drag and drop files on to the folders to organize them!",

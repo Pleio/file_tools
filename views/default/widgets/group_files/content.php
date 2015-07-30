@@ -54,10 +54,20 @@ echo elgg_view('output/url', array(
 
 echo elgg_view('output/url', array(
 	'name' => 'file_tools:upload:file',
-	'text' => elgg_echo("file:upload"),
+	'text' => elgg_echo("file_tools:upload:file"),
 	'id' => 'file_tools_list_upload_file_toggle',
 	'class' => 'file-tools-widget-button elgg-button elgg-button-action'
 ));
+
+if (elgg_is_active_plugin('odt_editor')) {
+	echo elgg_view('output/url', array(
+		'name' => 'file_tools:create:file',
+		'text' => elgg_echo("odt_editor:newdocument"),
+		'id' => 'file_tools_list_new_document_toggle',
+		'class' => 'file-tools-widget-button elgg-button elgg-button-action'
+	));
+}
+
 
 echo elgg_view("file_tools/list/files", array(
 	"files" => $files,
