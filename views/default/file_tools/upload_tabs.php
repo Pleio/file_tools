@@ -17,11 +17,5 @@
 		"link_id" => "file-tools-multi-form-link",
 		"selected" => ($selected_tab == "multi") ? true: false
 	);
-	$tabs[] = array(
-		"text" => elgg_echo("file_tools:upload:tabs:zip"),
-		"href" => "file/add/" . $page_owner_guid . "?upload_type=zip",
-		"link_id" => "file-tools-zip-form-link",
-		"selected" => ($selected_tab == "zip") ? true: false
-	);
-	
+
 	echo elgg_view("navigation/tabs", array("tabs" => $tabs, "id" => "file-tools-upload-tabs"));
