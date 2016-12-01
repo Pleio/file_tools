@@ -977,3 +977,58 @@
 			return false;
 		}
 	}
+
+	function file_tools_get_mimetype($tmp_file, $mime_type) {
+		$mime_type = ElggFile::detectMimeType($tmp_file, $mime_type);
+		$info = pathinfo($tmp_file);
+
+		$office_formats = array('docx', 'xlsx', 'pptx');
+		if ($mime_type == "application/zip" && in_array($info['extension'], $office_formats)) {
+			switch ($info['extension']) {
+				case 'docx':
+					$mime_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+					break;
+				case 'xlsx':
+					$mime_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+					break;
+				case 'pptx':
+					$mime_type = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+					break;
+			}
+		}
+
+		// check for bad ppt detection
+		if ($mime_type == "application/vnd.ms-office" && $info['extension'] == "ppt") {
+			$mime_type = "application/vnd.ms-powerpoint";
+		}
+
+		return $mime_type;
+	}
+
+	function file_tools_generate_thumbs($file) {
+		$formats = array(
+			"thumbnail" => 60,
+			"smallthumb" => 153,
+			"largethumb" => 600
+		);
+
+		$file->icontime = time();
+        $filestorename = $file->getFilename();
+        $filestorename = elgg_substr($filestorename, elgg_strlen("file/"));
+
+		foreach ($formats as $name => $size) {
+	        $thumbnail = get_resized_image_from_existing_file($file->getFilenameOnFilestore(), $size, $size, true);
+
+	        if ($thumbnail) {
+	        	$filename = "file/{$name}" . $filestorename;
+	            $thumb = new ElggFile();
+	            $thumb->setFilename($filename);
+	            $thumb->open("write");
+	            $thumb->write($thumbnail);
+	            $thumb->close();
+
+	            $file->$name = $filename;
+	            unset($thumbnail);
+	        }
+		}
+	}

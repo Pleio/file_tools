@@ -29,7 +29,7 @@
 		$body_vars = array();
 		$multi_vars = $form_vars;
 		$multi_vars["id"] = "file-tools-multi-form";
-		$multi_vars["action"] = "action/file/upload";
+		$multi_vars["action"] = "action/file_tools/file/upload";
 		$zip_vars = $form_vars;
 		$zip_vars["id"] = "file-tools-zip-form";
 		$single_vars = $form_vars;

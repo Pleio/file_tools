@@ -24,7 +24,8 @@
 		// object
 		'file_tools:object:files' => "%s file(s) in this folder",
 		'file_tools:object:no_files' => "No files in this folder",
-	
+		'file_tools:files' => "Files",
+
 		// input - folder select
 		'file_tools:input:folder_select:main' => "Main folder",
 	

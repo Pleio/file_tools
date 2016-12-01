@@ -6,13 +6,15 @@
  */
 
 // Get variables
+$guid = (int) get_input('file_guid');
 $title = htmlspecialchars(get_input('title', '', false), ENT_QUOTES, 'UTF-8');
 $desc = get_input("description");
 $access_id = (int) get_input("access_id");
 $container_guid = (int) get_input('container_guid', 0);
-$guid = (int) get_input('file_guid');
 $folder_guid = (int) get_input('folder_guid', 0);
 $tags = get_input("tags");
+
+$prefix = "file/";
 
 if ($container_guid == 0) {
 	$container_guid = elgg_get_logged_in_user_guid();
@@ -20,34 +22,89 @@ if ($container_guid == 0) {
 
 elgg_make_sticky_form('file');
 
-// check if upload failed
-if (!empty($_FILES['upload']['name']) && $_FILES['upload']['error'] != 0) {
-	register_error(elgg_echo('file:cannotload'));
-	forward(REFERER);
-}
+if (!$guid) {
+	$error = false;
+	if (is_array($_FILES["upload"]["name"])) {
+		foreach ($_FILES["upload"]["name"] as $number => $name) {
+			if ($_FILES["upload"]["error"][$number] !== 0) {
+        		register_error(elgg_echo("file:uploadfailed"));
+        		continue;
+			}
 
-// check whether this is a new file or an edit
-$new_file = true;
-if ($guid > 0) {
-	$new_file = false;
-}
+			$file = new FilePluginFile();
+			$file->subtype = "file";
+			$file->access_id = $access_id;
+			$file->container_guid = $container_guid;
+			$file->title = $name;
+			$file->originalfilename = $name;
 
-if ($new_file) {
-	// must have a file if a new file upload
-	if (empty($_FILES['upload']['name'])) {
-		$error = elgg_echo('file:nofile');
-		register_error($error);
-		forward(REFERER);
+			$filestorename = elgg_strtolower(time() . $name);
+			$file->setFilename($prefix . $filestorename);
+
+			$mime_type = file_tools_get_mimetype($_FILES["upload"]["tmp_name"][$number], $_FILES["upload"]["type"][$number]);
+			$file->setMimeType($mime_type);
+			$file->simpletype = file_get_simple_type($mime_type);
+
+			$guid = $file->save();
+
+			// Open the file to guarantee the directory exists
+			$file->open("write");
+			$file->close();
+
+			move_uploaded_file($_FILES["upload"]["tmp_name"][$number], $file->getFilenameOnFilestore());
+
+			if ($guid && $file->simpletype == "image") {
+				file_tools_generate_thumbs($file);
+				$file->icontime = time();
+				$file->save();
+			}
+
+	        add_to_river('river/object/file/create', 'create', elgg_get_logged_in_user_guid(), $file->guid);
+
+		}
+	} else {
+		if ($_FILES["upload"]["error"] !== 0) {
+    		register_error(elgg_echo("file:uploadfailed"));
+    		continue;
+		}
+
+		// if no title on new upload, grab filename
+		if (empty($title)) {
+			$title = htmlspecialchars($_FILES["upload"]["name"], ENT_QUOTES, "UTF-8");
+		}
+
+		$file = new FilePluginFile();
+		$file->subtype = "file";
+		$file->access_id = $access_id;
+		$file->container_guid = $container_guid;
+		$file->title = $title;
+		$file->originalfilename = $_FILES["upload"]["name"];
+
+		$filestorename = elgg_strtolower(time() . $_FILES["upload"]["name"]);
+		$file->setFilename($prefix . $filestorename);
+
+		$mime_type = file_tools_get_mimetype($_FILES["upload"]["tmp_name"], $_FILES["upload"]["type"]);
+		$file->setMimeType($mime_type);
+		$file->simpletype = file_get_simple_type($mime_type);
+
+		$guid = $file->save();
+
+		// Open the file to guarantee the directory exists
+		$file->open("write");
+		$file->close();
+
+		move_uploaded_file($_FILES["upload"]["tmp_name"], $file->getFilenameOnFilestore());
+
+		if ($guid && $file->simpletype == "image") {
+			file_tools_generate_thumbs($file);
+			$file->icontime = time();
+			$file->save();
+		}
+
+        add_to_river('river/object/file/create', 'create', elgg_get_logged_in_user_guid(), $file->guid);
 	}
 
-	$file = new FilePluginFile();
-	$file->subtype = "file";
-
-	// if no title on new upload, grab filename
-	if (empty($title)) {
-		$title = htmlspecialchars($_FILES['upload']['name'], ENT_QUOTES, 'UTF-8');
-	}
-
+	system_message(elgg_echo("file:saved"));
 } else {
 	// load original file object
 	$file = new FilePluginFile($guid);
@@ -62,171 +119,34 @@ if ($new_file) {
 		forward(REFERER);
 	}
 
-	if (!$title) {
-		// user blanked title, but we need one
-		$title = $file->title;
-	}
-}
+	if ($_FILES["upload"]["name"] && $_FILES["upload"]["error"] === 0) {
+		unlink($file->getFilenameOnFilestore());
+		move_uploaded_file($_FILES["upload"]["tmp_name"], $file->getFilenameOnFilestore());
 
-$file->title = $title;
-$file->description = $desc;
-$file->access_id = $access_id;
-$file->container_guid = $container_guid;
-
-$tags = explode(",", $tags);
-$file->tags = $tags;
-
-// we have a file upload, so process it
-if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
-
-	$prefix = "file/";
-
-	// if previous file, delete it
-	if ($new_file == false) {
-		$filename = $file->getFilenameOnFilestore();
-		if (file_exists($filename)) {
-			unlink($filename);
-		}
-
-		// use same filename on the disk - ensures thumbnails are overwritten
-		$filestorename = $file->getFilename();
-		$filestorename = elgg_substr($filestorename, elgg_strlen($prefix));
-	} else {
-		$filestorename = elgg_strtolower(time().$_FILES['upload']['name']);
+		file_tools_generate_thumbs($file);
 	}
 
-	$file->setFilename($prefix . $filestorename);
-	$mime_type = ElggFile::detectMimeType($_FILES['upload']['tmp_name'], $_FILES['upload']['type']);
-
-	// hack for Microsoft zipped formats
-	$info = pathinfo($_FILES['upload']['name']);
-	$office_formats = array('docx', 'xlsx', 'pptx');
-	if ($mime_type == "application/zip" && in_array($info['extension'], $office_formats)) {
-		switch ($info['extension']) {
-			case 'docx':
-				$mime_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-				break;
-			case 'xlsx':
-				$mime_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-				break;
-			case 'pptx':
-				$mime_type = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-				break;
-		}
-	}
-
-	// check for bad ppt detection
-	if ($mime_type == "application/vnd.ms-office" && $info['extension'] == "ppt") {
-		$mime_type = "application/vnd.ms-powerpoint";
-	}
-
-	$file->setMimeType($mime_type);
-	$file->originalfilename = $_FILES['upload']['name'];
-	$file->simpletype = file_get_simple_type($mime_type);
-
-	// Open the file to guarantee the directory exists
-	$file->open("write");
-	$file->close();
-	move_uploaded_file($_FILES['upload']['tmp_name'], $file->getFilenameOnFilestore());
-
-	$guid = $file->save();
-
-	// if image, we need to create thumbnails (this should be moved into a function)
-	if ($guid && $file->simpletype == "image") {
-		$file->icontime = time();
-		
-		$thumbnail = get_resized_image_from_existing_file($file->getFilenameOnFilestore(), 60, 60, true);
-		if ($thumbnail) {
-			$thumb = new ElggFile();
-			$thumb->setMimeType($_FILES['upload']['type']);
-
-			$thumb->setFilename($prefix."thumb".$filestorename);
-			$thumb->open("write");
-			$thumb->write($thumbnail);
-			$thumb->close();
-
-			$file->thumbnail = $prefix."thumb".$filestorename;
-			unset($thumbnail);
-		}
-
-		$thumbsmall = get_resized_image_from_existing_file($file->getFilenameOnFilestore(), 153, 153, true);
-		if ($thumbsmall) {
-			$thumb->setFilename($prefix."smallthumb".$filestorename);
-			$thumb->open("write");
-			$thumb->write($thumbsmall);
-			$thumb->close();
-			$file->smallthumb = $prefix."smallthumb".$filestorename;
-			unset($thumbsmall);
-		}
-
-		$thumblarge = get_resized_image_from_existing_file($file->getFilenameOnFilestore(), 600, 600, false);
-		if ($thumblarge) {
-			$thumb->setFilename($prefix."largethumb".$filestorename);
-			$thumb->open("write");
-			$thumb->write($thumblarge);
-			$thumb->close();
-			$file->largethumb = $prefix."largethumb".$filestorename;
-			unset($thumblarge);
-		}
-	}
-} else {
-	// not saving a file but still need to save the entity to push attributes to database
+	$file->title = $title;
+	$file->access_id = $access_id;
+	$file->tag = $tags;
 	$file->save();
 }
 
-// file saved so clear sticky form
-elgg_clear_sticky_form('file');
+elgg_clear_sticky_form("file");
 
-
-// handle results differently for new files and file updates
-if ($new_file) {
-	if ($guid) {
-		$message = elgg_echo("file:saved");
-		system_message($message);
-		add_to_river('river/object/file/create', 'create', elgg_get_logged_in_user_guid(), $file->guid);
-	} else {
-		// failed to save file object - nothing we can do about this
-		$error = elgg_echo("file:uploadfailed");
-		register_error($error);
-	}
-
-	$container = get_entity($container_guid);
-
-	if (elgg_instanceof($container, 'group')) {
-		if ($folder_guid) {
-			$forward_url = "file/group/$container->guid/all#$folder_guid";
-		} else {
-			$forward_url = "file/group/$container->guid/all";
-		}
-	} else {
-		if ($folder_guid) {
-			$forward_url = "file/owner/$container->username#$folder_guid";
-		} else {
-			$forward_url = "file/owner/$container->username";
-		}
-	}
-
-	forward($forward_url);
-
+$container = get_entity($container_guid);
+if (elgg_instanceof($container, "group")) {
+    if ($folder_guid) {
+        $forward_url = "file/group/{$container->guid}/all#{$folder_guid}";
+    } else {
+        $forward_url = "file/group/{$container->guid}/all";
+    }
 } else {
-	if ($guid) {
-		system_message(elgg_echo("file:saved"));
-	} else {
-		register_error(elgg_echo("file:uploadfailed"));
-	}
+    if ($folder_guid) {
+        $forward_url = "file/owner/{$container->username}#{$folder_guid}";
+    } else {
+        $forward_url = "file/owner/{$container->username}";
+    }
+}
 
-	$container = get_entity($container_guid);
-	if (elgg_instanceof($container, 'group')) {	
-		$folders = $file->getEntitiesFromRelationship('folder_of', true);
-		if (count($folders) > 0) {
-			$folder_guid = $folders[0]['guid'];
-		} else {
-			$folder_guid = null;
-		}
-
-		forward("file/group/" . $container_guid . "/all#" . $folder_guid);
-		exit();
-	}
-
-	forward("file/all");
-}	
+forward($forward_url);

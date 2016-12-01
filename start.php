@@ -22,15 +22,11 @@
 		
 		// register JS libraries
 		$vendors = elgg_get_site_url() . "mod/file_tools/vendors/";
-
-		elgg_register_simplecache_view("css/uploadify/uploadify");
-		elgg_register_css("jquery.uploadify", elgg_get_simplecache_url("css", "uploadify/uploadify"));
 		
 		elgg_register_js("jquery.tree", $vendors . "jstree/jquery.tree.min.js");
 		elgg_register_css("jquery.tree", $vendors . "jstree/themes/default/style.css");
 		
 		elgg_register_js("jquery.hashchange", $vendors . "hashchange/jquery.hashchange.js");
-		elgg_register_js("jquery.uploadify", $vendors . "uploadify/jquery.uploadify-3.1.min.js");
 
 		// register page handler for nice URL's
 		elgg_register_page_handler("file_tools", "file_tools_page_handler");

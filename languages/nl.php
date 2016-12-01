@@ -49,6 +49,7 @@ $language = array (
   'file_tools:group_tool_option:structure_management' => 'Sta map management toe voor leden',
   'file_tools:group_tool_option:file_management' => 'Sta bestand management toe voor leden',
   'file_tools:object:files' => '%s bestanden in deze map',
+  'file_tools:files' => "Bestanden",
   'file_tools:object:no_files' => 'Geen bestanden in deze map',
   'file_tools:input:folder_select:main' => 'Hoofdmap',
   'file_tools:list:title' => 'Toon mappen',
