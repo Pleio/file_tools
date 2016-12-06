@@ -78,6 +78,7 @@ if (!$guid) {
 		$file->access_id = $access_id;
 		$file->container_guid = $container_guid;
 		$file->title = $title;
+		$file->tags = string_to_tag_array($tags);
 		$file->originalfilename = $_FILES["upload"]["name"];
 
 		$filestorename = elgg_strtolower(time() . $_FILES["upload"]["name"]);
@@ -128,7 +129,7 @@ if (!$guid) {
 
 	$file->title = $title;
 	$file->access_id = $access_id;
-	$file->tag = $tags;
+	$file->tags = string_to_tag_array($tags);
 	$file->save();
 }
 
