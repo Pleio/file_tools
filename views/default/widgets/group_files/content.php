@@ -45,21 +45,25 @@ $options = array(
 
 $files = elgg_get_entities_from_metadata($options);
 
-echo elgg_view('output/url', array(
-	'name' => 'file_tools:new:title',
-	'text' => elgg_echo("file_tools:new:title"),
-	'id' => 'file_tools_list_new_folder_toggle',
-	'class' => 'file-tools-widget-button elgg-button elgg-button-action'
-));
+if (file_tools_use_folder_structure() && $group->canWriteToContainer(0, "object", "folder")) {
+	echo elgg_view('output/url', array(
+		'name' => 'file_tools:new:title',
+		'text' => elgg_echo("file_tools:new:title"),
+		'id' => 'file_tools_list_new_folder_toggle',
+		'class' => 'file-tools-widget-button elgg-button elgg-button-action'
+	));
+}
 
-echo elgg_view('output/url', array(
-	'name' => 'file_tools:upload:file',
-	'text' => elgg_echo("file_tools:upload:file"),
-	'id' => 'file_tools_list_upload_file_toggle',
-	'class' => 'file-tools-widget-button elgg-button elgg-button-action'
-));
+if ($group->canWriteToContainer(0, "object", "file")) {
+	echo elgg_view('output/url', array(
+		'name' => 'file_tools:upload:file',
+		'text' => elgg_echo("file_tools:upload:file"),
+		'id' => 'file_tools_list_upload_file_toggle',
+		'class' => 'file-tools-widget-button elgg-button elgg-button-action'
+	));
+}
 
-if (elgg_is_active_plugin('odt_editor')) {
+if (elgg_is_active_plugin('odt_editor') && $group->canWriteToContainer(0, "object", "file")) {
 	echo elgg_view('output/url', array(
 		'name' => 'file_tools:create:file',
 		'text' => elgg_echo("odt_editor:newdocument"),
