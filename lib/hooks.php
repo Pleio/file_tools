@@ -68,6 +68,10 @@
 							gatekeeper();
 						}
 					}
+
+					$result = false;
+					set_input('guid', $page[1]);
+					include(dirname(dirname(__FILE__)) . "/pages/file/view.php");
 					break;
 				case "owner":
 					if(file_tools_use_folder_structure()){
@@ -247,7 +251,7 @@
 					$result[] = ElggMenuItem::factory(array(
 						"name" => "view",
 						"text" => elgg_view_icon("speech-bubble"),
-						"href" => "file/view/" . $entity->getGUID() . "/" . elgg_get_friendly_title($entity->title),
+						"href" => "file/view/" . $entity->getGUID() . "/" . urlencode($entity->title),
 						"title" => elgg_echo("file_tools:discussion"),
 						"priority" => 200
 					));

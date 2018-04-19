@@ -116,13 +116,13 @@
 
 	function file_tools_url_handler($entity) {
 		if (file_tools_is_odt($entity)) {
-			return "file/view/" . $entity->getGUID() . "/" . elgg_get_friendly_title($entity->title);
+			return "file/view/" . $entity->getGUID() . "/" . urlencode($entity->title);
 		}
 
 		if (elgg_in_context("file_tools")) {
-			return "file/download/" . $entity->getGUID();
+			return "file/download/" . $entity->getGUID() . "/" . urlencode($entity->title);
 		} else {
-			return "file/view/" . $entity->getGUID() . "/" . elgg_get_friendly_title($entity->title);
+			return "file/view/" . $entity->getGUID() . "/" . urlencode($entity->title);
 		}
 	}
 

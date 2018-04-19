@@ -333,6 +333,7 @@
 	if (!function_exists("mime_content_type")) {
 	   function mime_content_type($fn) {
 	
+			error_log("fn");
 	      static $mime_magic_data;
 	
 	      #-- fallback
